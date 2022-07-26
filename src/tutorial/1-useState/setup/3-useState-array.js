@@ -1,18 +1,21 @@
-import React from 'react';
+import React, {useState} from 'react';
 import {data} from '../../../data';
 const UseStateArray = () => {
-  const [people, setPeople] = React.useState(data);
+  const [people, setPeople] = useState(data);
 
-  const removeItem = (id) => {
+  const removeItem = (event, id) => {
     let newPeople = people.filter((person) => person.id !== id);
     setPeople(newPeople);
+    console.log(event);
   };
 
   const addItem = () => {
-    let newPeople = [...people, {id: people.length + 1, name: 'new item'}];
-    setPeople(newPeople);
-    console.log(newPeople);
+    const ids = people.map((person) => person.id);
+    let nextId = (ids.length > 0) ? Math.max(...ids) + 1 : 1;
+    let newPerson = {id: nextId, name: 'New Person'};
+    setPeople([...people, newPerson]);
   };
+
   return (
     <>
       {people.map((person) => {
@@ -20,7 +23,7 @@ const UseStateArray = () => {
         return (
           <div key={id} className='item'>
             <h4>{name}</h4>
-            <button onClick={() => removeItem(id)}>remove</button>
+            <button onClick={(event) => removeItem(event, id)}>remove</button>
           </div>
         );
       })}
